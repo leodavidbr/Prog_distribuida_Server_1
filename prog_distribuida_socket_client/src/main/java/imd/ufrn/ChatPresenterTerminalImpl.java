@@ -2,9 +2,9 @@ package imd.ufrn;
 
 import imd.ufrn.interfaces.IChatPresenter;
 
-public class ChatPresenterImpl implements IChatPresenter {
+public class ChatPresenterTerminalImpl implements IChatPresenter {
 
-    public ChatPresenterImpl() {
+    public ChatPresenterTerminalImpl() {
         showInitialMessage();
     }
 

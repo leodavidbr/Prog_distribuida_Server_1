@@ -10,7 +10,7 @@ public class ChatController implements Runnable {
     public ChatController() {
         serverCommunicationController = new SocketCommunicationController();
         serverCommunicationController.initialize(serverMessage -> handleMessageRecievedFromServer(serverMessage));
-        chatPresenter = new ChatPresenterImpl();
+        chatPresenter = new ChatPresenterTerminalImpl();
     }
 
     @Override
