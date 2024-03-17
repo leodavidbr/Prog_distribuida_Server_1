@@ -8,10 +8,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.function.Consumer;
 
+import imd.ufrn.exceptions.NotInitializedException;
+import imd.ufrn.interfaces.ICommunicationWithServerController;
+
 // offers the sendMessage method and 
 // calls the callbackFunctionMessageRecieved function when a 
 // new message is recieved from the server
-public class SocketCommunication implements Runnable {
+public class SocketCommunicationController implements Runnable, ICommunicationWithServerController {
 
     private Socket clientSocket;
     private BufferedReader readStream;
@@ -24,26 +27,29 @@ public class SocketCommunication implements Runnable {
 
     public boolean isInitialized = false;
 
-    public SocketCommunication(Consumer<String> callbackFunctionMessageRecieved) {
-        this.callbackFunctionMessageRecieved = callbackFunctionMessageRecieved;
-
-        initialize();
+    public SocketCommunicationController() {
     }
 
-    public SocketCommunication(Consumer<String> callbackFunctionMessageRecieved, String host, int port) {
+    public SocketCommunicationController(String host, int port) {
         this.host = host;
         this.port = port;
-        this.callbackFunctionMessageRecieved = callbackFunctionMessageRecieved;
-
-        initialize();
     }
 
     @Override
     public void run() {
+        if (!isInitialized) {
+            throw new NotInitializedException(
+                    "The Socket was not initialized calling the method initialize before calling run");
+        }
         getMessageLoop();
     }
 
+    @Override
     public void sendMessage(String mensagem) {
+        if (!isInitialized) {
+            throw new NotInitializedException(
+                    "The Socket was not initialized calling the method initialize before calling sendMessage");
+        }
         if (mensagem == null || mensagem.length() == 0) {
             return;
         }
@@ -54,11 +60,13 @@ public class SocketCommunication implements Runnable {
         // }
     }
 
-    private boolean initialize() {
+    @Override
+    public boolean initialize(Consumer<String> callbackFunctionMessageRecieved) {
         if (!initializeSocket())
             return false;
         if (!initializeReadAndWriteStream())
             return false;
+        this.callbackFunctionMessageRecieved = callbackFunctionMessageRecieved;
 
         isInitialized = true;
         return true;
