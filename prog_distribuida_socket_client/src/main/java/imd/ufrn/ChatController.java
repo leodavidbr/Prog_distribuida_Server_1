@@ -1,15 +1,19 @@
 package imd.ufrn;
 
 import imd.ufrn.interfaces.IChatPresenter;
-import imd.ufrn.interfaces.ICommunicationWithServerController;
+import imd.ufrn.interfaces.BaseCommunicationWithServerController;
+import imd.ufrn.interfaces.BaseInputReceiver;
 
 public class ChatController implements Runnable {
-    ICommunicationWithServerController serverCommunicationController;
+    BaseCommunicationWithServerController serverCommunicationController;
+    BaseInputReceiver inputReceiver;
     IChatPresenter chatPresenter;
 
     public ChatController() {
-        serverCommunicationController = new SocketCommunicationController();
-        serverCommunicationController.initialize(serverMessage -> handleMessageRecievedFromServer(serverMessage));
+        serverCommunicationController = new SocketCommunicationController(
+                serverMessage -> handleMessageRecievedFromServer(serverMessage));
+        inputReceiver = new InputReceiverTerminalImpl(
+                message -> handleSendMessageFromClient(message));
         chatPresenter = new ChatPresenterTerminalImpl();
     }
 

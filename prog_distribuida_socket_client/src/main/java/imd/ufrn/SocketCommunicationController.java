@@ -9,12 +9,12 @@ import java.net.UnknownHostException;
 import java.util.function.Consumer;
 
 import imd.ufrn.exceptions.NotInitializedException;
-import imd.ufrn.interfaces.ICommunicationWithServerController;
+import imd.ufrn.interfaces.BaseCommunicationWithServerController;
 
 // offers the sendMessage method and 
 // calls the callbackFunctionMessageRecieved function when a 
 // new message is recieved from the server
-public class SocketCommunicationController implements Runnable, ICommunicationWithServerController {
+public class SocketCommunicationController extends BaseCommunicationWithServerController implements Runnable {
 
     private Socket clientSocket;
     private BufferedReader readStream;
@@ -23,33 +23,28 @@ public class SocketCommunicationController implements Runnable, ICommunicationWi
     private String host = "127.0.0.1";
     private int port = 9999;
 
-    private Consumer<String> callbackFunctionMessageRecieved;
-
-    public boolean isInitialized = false;
-
-    public SocketCommunicationController() {
-    }
-
-    public SocketCommunicationController(String host, int port) {
+    public SocketCommunicationController(Consumer<String> callbackFunctionMessageRecieved, String host, int port) {
+        super(callbackFunctionMessageRecieved);
         this.host = host;
         this.port = port;
     }
 
+    public SocketCommunicationController(Consumer<String> callbackFunctionMessageRecieved) {
+        super(callbackFunctionMessageRecieved);
+    }
+
     @Override
     public void run() {
-        if (!isInitialized) {
-            throw new NotInitializedException(
-                    "The Socket was not initialized calling the method initialize before calling run");
+        // TODO: Verify if initialize() should instead be on the constructor
+        boolean isInitializedCorrectly = initialize();
+        if (!isInitializedCorrectly) {
+            throw new NotInitializedException("Socket could not initialize correctly");
         }
         getMessageLoop();
     }
 
     @Override
     public void sendMessage(String mensagem) {
-        if (!isInitialized) {
-            throw new NotInitializedException(
-                    "The Socket was not initialized calling the method initialize before calling sendMessage");
-        }
         if (mensagem == null || mensagem.length() == 0) {
             return;
         }
@@ -61,14 +56,12 @@ public class SocketCommunicationController implements Runnable, ICommunicationWi
     }
 
     @Override
-    public boolean initialize(Consumer<String> callbackFunctionMessageRecieved) {
+    protected boolean initialize() {
         if (!initializeSocket())
             return false;
         if (!initializeReadAndWriteStream())
             return false;
-        this.callbackFunctionMessageRecieved = callbackFunctionMessageRecieved;
 
-        isInitialized = true;
         return true;
     }
 

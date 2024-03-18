@@ -5,27 +5,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.function.Consumer;
 
-import imd.ufrn.exceptions.NotInitializedException;
-import imd.ufrn.interfaces.IInputReceiver;
+import imd.ufrn.interfaces.BaseInputReceiver;
 
-public class InputReceiverTerminalImpl implements IInputReceiver, Runnable {
-    private Consumer<String> callbackFunctionMessageWritten;
-    private boolean isInitialized = false;
+public class InputReceiverTerminalImpl extends BaseInputReceiver implements Runnable {
 
-    @Override
-    public void initialize(Consumer<String> callbackFunctionMessageWritten) {
-        this.callbackFunctionMessageWritten = callbackFunctionMessageWritten;
-        isInitialized = true;
+    public InputReceiverTerminalImpl(Consumer<String> callbackFunctionMessageWritten) {
+        super(callbackFunctionMessageWritten);
     }
 
     @Override
     public void run() {
-        if (!isInitialized) {
-            throw new NotInitializedException(
-                    "The inputReceiver was not initialized calling the initialize method before calling run");
-        }
-
         BufferedReader terminalReader = new BufferedReader(new InputStreamReader(System.in));
+
         try {
             String terminalMessage;
             while (true) {
