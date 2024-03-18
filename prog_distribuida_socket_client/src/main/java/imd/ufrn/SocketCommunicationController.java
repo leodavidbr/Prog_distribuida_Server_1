@@ -14,7 +14,7 @@ import imd.ufrn.interfaces.BaseCommunicationWithServerController;
 // offers the sendMessage method and 
 // calls the callbackFunctionMessageRecieved function when a 
 // new message is recieved from the server
-public class SocketCommunicationController extends BaseCommunicationWithServerController implements Runnable {
+public class SocketCommunicationController extends BaseCommunicationWithServerController {
 
     private Socket clientSocket;
     private BufferedReader readStream;

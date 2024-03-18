@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 // calls the callbackFunctionMessageRecieved function when a 
 // new message is recieved from the server
 // has to be initialized before use.
-public abstract class BaseCommunicationWithServerController {
+public abstract class BaseCommunicationWithServerController implements Runnable {
 
     protected Consumer<String> callbackFunctionMessageRecieved;
 

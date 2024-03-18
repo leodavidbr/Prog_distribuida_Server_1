@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 import imd.ufrn.interfaces.BaseInputReceiver;
 
-public class InputReceiverTerminalImpl extends BaseInputReceiver implements Runnable {
+public class InputReceiverTerminalImpl extends BaseInputReceiver {
 
     public InputReceiverTerminalImpl(Consumer<String> callbackFunctionMessageWritten) {
         super(callbackFunctionMessageWritten);

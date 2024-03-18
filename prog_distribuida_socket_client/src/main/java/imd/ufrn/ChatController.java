@@ -5,8 +5,10 @@ import imd.ufrn.interfaces.BaseCommunicationWithServerController;
 import imd.ufrn.interfaces.BaseInputReceiver;
 
 public class ChatController implements Runnable {
-    BaseCommunicationWithServerController serverCommunicationController;
-    BaseInputReceiver inputReceiver;
+    BaseCommunicationWithServerController serverCommunicationController; // Maybe there's no need to save this
+    BaseInputReceiver inputReceiver; // Maybe there's no need to save this
+    Thread serverCommunicationControllerThread;
+    Thread inputRecieverThread;
     IChatPresenter chatPresenter;
 
     public ChatController() {
@@ -15,6 +17,11 @@ public class ChatController implements Runnable {
         inputReceiver = new InputReceiverTerminalImpl(
                 message -> handleSendMessageFromClient(message));
         chatPresenter = new ChatPresenterTerminalImpl();
+
+        serverCommunicationControllerThread = new Thread(serverCommunicationController);
+        inputRecieverThread = new Thread(inputReceiver);
+        serverCommunicationControllerThread.run();
+        inputRecieverThread.run();
     }
 
     @Override
