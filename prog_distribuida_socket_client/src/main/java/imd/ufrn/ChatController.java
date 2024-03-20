@@ -20,8 +20,8 @@ public class ChatController implements Runnable {
 
         serverCommunicationControllerThread = new Thread(serverCommunicationController);
         inputRecieverThread = new Thread(inputReceiver);
-        serverCommunicationControllerThread.run();
-        inputRecieverThread.run();
+        serverCommunicationControllerThread.start();
+        inputRecieverThread.start();
     }
 
     @Override
