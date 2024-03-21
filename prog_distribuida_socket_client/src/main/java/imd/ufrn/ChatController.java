@@ -4,7 +4,12 @@ import imd.ufrn.interfaces.IChatPresenter;
 import imd.ufrn.interfaces.BaseCommunicationWithServerController;
 import imd.ufrn.interfaces.BaseInputReceiver;
 
-public class ChatController implements Runnable {
+// controller could be a thread (runnable) that saves the values sent by the callback and unlocks a concurrent lock
+// that was locking the execution of the specific handle method (I feel that it would need a little bit more complexity than described)
+// this way, all the logic is done in the ChatController thread without stoping the other threads for 
+// the execution of the processing
+// but that is a lot of unnecessary complexity for this project.
+public class ChatController {
     BaseCommunicationWithServerController serverCommunicationController; // Maybe there's no need to save this
     BaseInputReceiver inputReceiver; // Maybe there's no need to save this
     Thread serverCommunicationControllerThread;
@@ -22,11 +27,6 @@ public class ChatController implements Runnable {
         inputRecieverThread = new Thread(inputReceiver);
         serverCommunicationControllerThread.start();
         inputRecieverThread.start();
-    }
-
-    @Override
-    public void run() {
-
     }
 
     public void handleSendMessageFromClient(String clientMessage) {

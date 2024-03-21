@@ -44,7 +44,7 @@ public class SocketCommunicationController extends BaseCommunicationWithServerCo
     }
 
     @Override
-    public void sendMessage(String mensagem) {
+    public synchronized void sendMessage(String mensagem) {
         if (mensagem == null || mensagem.length() == 0) {
             return;
         }
@@ -105,7 +105,7 @@ public class SocketCommunicationController extends BaseCommunicationWithServerCo
         try {
             while (true) {
                 message = getMessage();
-                System.out.println("Message recieved from server: " + message);
+                // System.out.println("Message recieved from server: " + message);
                 callbackFunctionMessageRecieved.accept(message);
             }
         } catch (IOException e) {

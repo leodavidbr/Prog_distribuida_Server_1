@@ -6,8 +6,6 @@ package imd.ufrn;
  */
 public class App {
     public static void main(String[] args) {
-        Runnable chatController = new ChatController();
-        Thread chatContollerThread = new Thread(chatController);
-        chatContollerThread.start();
+        ChatController chatController = new ChatController();
     }
 }

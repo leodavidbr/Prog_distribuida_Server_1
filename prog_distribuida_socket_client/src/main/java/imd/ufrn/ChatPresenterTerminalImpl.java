@@ -8,18 +8,19 @@ public class ChatPresenterTerminalImpl implements IChatPresenter {
         showInitialMessage();
     }
 
-    private void showInitialMessage() {
+    synchronized private void showInitialMessage() {
         System.out.println("Welcome to OQueBot");
-        System.out.println("Write your message and the bot will answer you");
+        System.out.println("Write your message and the bot will answer you: ");
+        System.out.println("");
     }
 
     @Override
-    public void showNewMessageFromClient(String message) {
-        System.out.println("client said: " + message);
+    synchronized public void showNewMessageFromClient(String message) {
+        // System.out.println("client said: " + message);
     }
 
     @Override
-    public void showNewMessageFromServer(String message) {
+    synchronized public void showNewMessageFromServer(String message) {
         System.out.println("server said: " + message);
     }
 }
